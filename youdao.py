@@ -7,20 +7,17 @@
 import json
 import sys
 
-try:        # py3
+try:        # python3
     from urllib.parse import urlparse, quote, urlencode, unquote
     from urllib.request import urlopen
-except:     # py2
+except:     # python2
     from urllib import urlencode, quote, unquote
     from urllib2 import urlopen
 
 
 def fetch(query_str=''):
     query_str = query_str.strip("'").strip('"').strip()
-    if not query_str:
-        query_str = 'python'
 
-    print("Youdao Translation :")
     print(query_str)
     query = {
         'q': query_str
@@ -34,24 +31,31 @@ def fetch(query_str=''):
 def parse(html):
     d = json.loads(html)
     try:
-        if d.get('errorCode') == 0:
+        if d.get('errorCode') == 0 :
             explains = d.get('basic').get('explains')
-            for i in explains:
-                print(i)
-        else:
-            print('无法翻译')
-
+            for explain in explains:
+                print(explain)
+        elif d.get('errorCode' == 20) :
+            print('要翻译的文本过长')
+        elif d.get('errorCode' == 30) :
+            print('无法进行有效的翻译')
+        elif d.get('errorCode' == 40) :
+            print('不支持的语言类型')
+        elif d.get('errorCode' == 50) :
+            print('无效的key')
+        else :
+            print('无词典结果，仅在获取词典结果生效')
     except:
         print('翻译出错，请输入合法单词')
 
 
 def main():
-    try:
-        s = sys.argv[1]
-    except IndexError:
-        s = 'python'
-    parse(fetch(s))
-
+    if (len(sys.argv) == 1):
+        print("No word to translate")
+        exit(0)
+    for argument in sys.argv[1:]:
+        parse(fetch(argument))
+        print("")
 
 if __name__ == '__main__':
     main()
