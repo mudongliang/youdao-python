@@ -36,7 +36,7 @@ def parse(html):
         if d.get('errorCode') == 0:
             basicexplains = d.get('basic').get('explains')
             for explain in basicexplains:
-                print(explain)
+                print(explain.encode('utf-8'))
         elif d.get('errorCode' == 20):
             print('要翻译的文本过长')
         elif d.get('errorCode' == 30):
@@ -57,7 +57,6 @@ def main():
         exit(0)
     for argument in sys.argv[1:]:
         parse(fetch(argument))
-        print("")
 
 if __name__ == '__main__':
     main()
