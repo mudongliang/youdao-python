@@ -6,11 +6,15 @@ youdao shell implemented in python
 ```sh
 $ git clone https://github.com/mudongliang/youdao-python
 $ cd youdao-python
-$ sudo cp youdao.py /usr/local/bin/youda
+$ sudo cp youdao.py /usr/bin/youda
+
 $ which youdao 
-/usr/local/bin/youdao
+/usr/bin/youdao
+
 $ youdao
-Youdao Translation :
+No word to translate
+
+$ youdao hello
 hello
 n. 表示问候， 惊奇或唤起注意时的用语
 int. 喂；哈罗
