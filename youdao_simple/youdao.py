@@ -7,6 +7,7 @@
 import json
 import sys
 
+
 try:        # python3
     from urllib.parse import urlparse, quote, urlencode, unquote
     from urllib.request import urlopen
