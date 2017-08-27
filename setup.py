@@ -12,7 +12,7 @@ setup(
     classifiers = [
         "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
         "Programming Language :: Python :: 2",
-#        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3",
     ],
     description = 'Youdao Python',
     long_description = open('README').read(),
