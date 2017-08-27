@@ -15,7 +15,7 @@ setup(
         "Programming Language :: Python :: 3",
     ],
     description = 'Youdao Python',
-    long_description = open('README').read(),
+    long_description = open('README.rst').read(),
     entry_points = {
         'console_scripts': [
             'youdao = youdao_simple.youdao:main',
