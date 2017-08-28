@@ -18,7 +18,7 @@ python setup.py
 
 .. code:: sh
 
-    $ git clone https://github.com/mudongliang/youdao-python
+    $ git clone https://github.com/MintCN/youdao-python
     $ cd youdao-python
     $ sudo python setup.py install
 
