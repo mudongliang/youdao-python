@@ -31,9 +31,8 @@ def fetch(query_str=''):
     '''
     use youdao api to get json result of translation
     '''
-    query_str = query_str.strip("'").strip('"').strip()
 
-    print(query_str)
+    print("查询单词：", query_str)
     query = {
         'q': query_str
     }
@@ -82,6 +81,16 @@ def parse(html):
         print('翻译出错，请输入合法单词')
 
 
+def sanitize_arg(query_str):
+    if hasattr(query_str, "decode") :
+        result = query_str.decode("utf8")
+        result = result.strip("'")
+        result = result.strip('"')
+        result = result.encode("utf-8")
+    else:
+        result = query_str.strip("'").strip('"')
+    return result
+
 def main():
     '''
     parse arguments to translate
@@ -90,7 +99,8 @@ def main():
         print("No word to translate")
         exit(0)
     for argument in sys.argv[1:]:
-        parse(fetch(argument))
+        youdao_json = fetch(sanitize_arg(argument))
+        parse(youdao_json)
 
 if __name__ == '__main__':
     main()
