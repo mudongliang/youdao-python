@@ -10,7 +10,6 @@ simple module to translate English to Chinse, Chinese to English
 
 from __future__ import print_function, unicode_literals
 import json
-import sys
 import argparse
 from youdao_simple import __version__
 
@@ -56,8 +55,10 @@ def parse(html):
         print("")
         print("有道词典-基本词典 : ")
         basicexplains = translation.get('basic').get('explains')
-        print("英式发音 [", translation.get("basic").get("uk-phonetic"), "] \t"+
-              "美式发音 [", translation.get("basic").get("us-phonetic"), "]")
+        print("英式发音 [",
+              translation.get("basic").get("uk-phonetic"), "] \t"+
+              "美式发音 [",
+              translation.get("basic").get("us-phonetic"), "]")
         for explain in basicexplains:
             print(explain)
         print("")
@@ -84,7 +85,10 @@ def parse(html):
 
 
 def sanitize_arg(query_str):
-    if hasattr(query_str, "decode") :
+    '''
+    sanitize query string
+    '''
+    if hasattr(query_str, "decode"):
         result = query_str.decode("utf8")
         result = result.strip("'")
         result = result.strip('"')
@@ -98,9 +102,14 @@ def main():
     parse arguments to translate
     '''
 
-    parser = argparse.ArgumentParser(prog="youdao", description="youdao translation in terminal")
-    parser.add_argument('-v', '--version', action='version', version='%(prog)s ' + __version__)
-    parser.add_argument('-t', '--translation', dest="translation", help='Translate following arguments')
+    parser = argparse.ArgumentParser(prog="youdao",
+                                     description="youdao translation in terminal")
+    parser.add_argument('-v', '--version',
+                        action='version',
+                        version='%(prog)s ' + __version__)
+    parser.add_argument('-t', '--translation',
+                        dest="translation",
+                        help='Translate following arguments')
     args = parser.parse_args()
 
     if args.translation:
