@@ -6,13 +6,22 @@ rst:
 check:
 	python setup.py check
 
-build:
+build: clean
 	python setup.py bdist_wheel --universal
+
+upload: build
+	twine upload dist/*
 
 install:
 	sudo python setup.py install
 
-upload:
-	twine upload dist/*
+uninstall:
+	sudo python setup.py install --record=/tmp/filelist
+	cat /tmp/filelist | sudo xargs rm -rf
 
+clean:
+	rm -rf dist/*
+
+distclean:
+	sudo rm -rf build dist youdao_simple.egg-info
 
