@@ -11,6 +11,8 @@ simple module to translate English to Chinse, Chinese to English
 from __future__ import print_function, unicode_literals
 import json
 import sys
+import argparse
+from youdao_simple import __version__
 
 
 try:
@@ -95,11 +97,14 @@ def main():
     '''
     parse arguments to translate
     '''
-    if len(sys.argv) == 1:
-        print("No word to translate")
-        exit(0)
-    for argument in sys.argv[1:]:
-        youdao_json = fetch(sanitize_arg(argument))
+
+    parser = argparse.ArgumentParser(prog="youdao", description="youdao translation in terminal")
+    parser.add_argument('-v', '--version', action='version', version='%(prog)s ' + __version__)
+    parser.add_argument('-t', '--translation', dest="translation", help='Translate following arguments')
+    args = parser.parse_args()
+
+    if args.translation:
+        youdao_json = fetch(sanitize_arg(args.translation))
         parse(youdao_json)
 
 if __name__ == '__main__':
