@@ -41,6 +41,32 @@ def fetch(query_str=''):
     html = response.read().decode('utf-8')
     return html
 
+def print_basic(basic):
+    '''
+    print basic translation
+    '''
+    print("")
+    print("有道词典-基本词典 : ")
+    print("英式发音 [",
+          basic.get("uk-phonetic"), '] \t',
+          "美式发音 [",
+          basic.get('us-phonetic'), ']')
+    basicexplains = basic.get('explains')
+    for explain in basicexplains:
+        print(explain)
+
+def print_web(web):
+    '''
+    print web translation
+    '''
+    print("")
+    print('有道词典-网络释义 : ')
+    for explain in web:
+        value = ""
+        for exp in explain["value"]:
+            value += exp
+            value += " "
+        print(explain["key"], " : ", value)
 
 def parse(html):
     '''
@@ -51,22 +77,10 @@ def parse(html):
         print("有道翻译 : ")
         for trans in translation.get("translation"):
             print(trans)
-        print("")
-        print("有道词典-基本词典 : ")
-        basicexplains = translation.get('basic').get('explains')
-        print("英式发音 [", translation.get("basic").get("uk-phonetic"), "] \t"+
-              "美式发音 [", translation.get("basic").get("us-phonetic"), "]")
-        for explain in basicexplains:
-            print(explain)
-        print("")
-        print("有道词典-网络释义 : ")
-        webexplains = translation.get("web")
-        for explain in webexplains:
-            value = ""
-            for exp in explain["value"]:
-                value += exp
-                value += " "
-            print(explain["key"], " : ", value)
+        if 'basic' in translation:
+            print_basic(translation.get('basic'))
+        if 'web' in translation:
+            print_web(translation.get('web'))
     elif translation.get('errorCode') == 20:
         print('要翻译的文本过长')
     elif translation.get('errorCode') == 30:
@@ -82,7 +96,10 @@ def parse(html):
 
 
 def sanitize_arg(query_str):
-    if hasattr(query_str, "decode") :
+    '''
+    sanitize the argument first
+    '''
+    if hasattr(query_str, "decode"):
         result = query_str.decode("utf8")
         result = result.strip("'")
         result = result.strip('"')
@@ -96,11 +113,12 @@ def main():
     parse arguments to translate
     '''
     if len(sys.argv) == 1:
-        print("No word to translate")
+        print('No word to translate')
         exit(0)
     for argument in sys.argv[1:]:
         youdao_json = fetch(sanitize_arg(argument))
         parse(youdao_json)
+        print('')
 
 if __name__ == '__main__':
     main()
