@@ -46,11 +46,13 @@ def print_basic(basic):
     print basic translation
     '''
     print("")
-    print("有道词典-基本词典 : ")
-    print("英式发音 [",
-          basic.get("uk-phonetic"), '] \t',
-          "美式发音 [",
-          basic.get('us-phonetic'), ']')
+    print("有道词典-基本词典：")
+    if ((basic.get("uk-phonetic") is None) or
+            (basic.get("us-phonetic") is None)):
+        print("英式发音 [",
+              basic.get("uk-phonetic"), '] \t'
+              "美式发音 [",
+              basic.get('us-phonetic'), ']')
     basicexplains = basic.get('explains')
     for explain in basicexplains:
         print(explain)
@@ -60,7 +62,7 @@ def print_web(web):
     print web translation
     '''
     print("")
-    print('有道词典-网络释义 : ')
+    print('有道词典-网络释义：')
     for explain in web:
         value = ""
         for exp in explain["value"]:
@@ -74,7 +76,7 @@ def parse(html):
     '''
     translation = json.loads(html)
     if translation.get('errorCode') == 0:
-        print("有道翻译 : ")
+        print("有道翻译：")
         for trans in translation.get("translation"):
             print(trans)
         if 'basic' in translation:
