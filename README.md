@@ -12,7 +12,7 @@ sudo pip install youdao_simple
 ### python setup.py
 
 ```sh
-$ git clone https://github.com/MintCN/youdao-python
+$ git clone https://github.com/mudongliang/youdao-python
 $ cd youdao-python
 $ sudo python setup.py install
 ```
