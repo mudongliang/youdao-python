@@ -95,6 +95,6 @@ python setup.py
 .. code:: sh
 
     $ sudo python setup.py install --record=/tmp/filelist
-    # this file will record all the 
+    # this file will record all the installed files
 
     $ cat /tmp/filelist | sudo xargs rm -rf
