@@ -1,0 +1,12 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: youdao_simple
+Upstream-Contact: Dongliang Mu <mudongliangabcd@gmail.com>
+Source: https://github.com/mudongliang/youdao-python
+
+
+Files: *
+Copyright: 2010 Daniela Debianizer
+License: GPL-3+
+ On Debian GNU/Linux systems, the complete text of the GNU General
+ Public License can be found in `/usr/share/common-licenses/GPL-2'
+

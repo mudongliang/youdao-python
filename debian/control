@@ -1,0 +1,27 @@
+Source: youdao_simple
+Section: misc
+Priority: optional
+Maintainer: Dongliang Mu <mudongliangabcd@gmail.com>
+Uploaders:
+Build-Depends:
+ debhelper (>= 11~),
+ dh-python,
+ python-all,
+ python-setuptools,
+ python3-all,
+ python3-setuptools
+Standards-Version: 1.1.0
+X-Python-Version: >= 2.6
+X-Python3-Version: >= 3.2
+Homepage: https://github.com/mudongliang/youdao-python
+Vcs-Git: https://github.com/mudongliang/youdao-python.git
+Vcs-Browser: https://github.com/mudongliang/youdao-python
+Rules-Requires-Root: no
+
+Package: youdao_simple
+Architecture: all
+Depends:
+ ${misc:Depends},
+ ${python3:Depends}
+Suggests:
+Description: youdao dictionary implemented in python
