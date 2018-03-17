@@ -27,19 +27,20 @@ URL = "http://fanyi.youdao.com/openapi.do?" + \
       "keyfrom=youdao-python&key=701380394" + \
       "&type=data&doctype=json&version=1.1&"
 
-def fetch(query_str=''):
+
+def fetch(query_str):
     '''
     use youdao api to get json result of translation
     '''
-
-    print("查询单词：", query_str)
+    print("查询单词：", query_str.strip())
     query = {
-        'q': query_str
+        'q': query_str.strip()
     }
     url = URL + urlencode(query)
     response = urlopen(url, timeout=3)
-    html = response.read().decode('utf-8')
+    html = response.read().decode("utf-8")
     return html
+
 
 def print_basic(basic):
     '''
@@ -47,22 +48,31 @@ def print_basic(basic):
     '''
     print("")
     print("有道词典-基本词典：")
-    if ((basic.get("uk-phonetic") is None) or
-            (basic.get("us-phonetic") is None)):
+    print("发音 [", basic.get("phonetic"), ']')
+    if ("uk-phonetic" in basic) and ("us-phonetic" in basic):
         print("英式发音 [",
-              basic.get("uk-phonetic"), '] \t'
+              basic.get("uk-phonetic"), "] \t",
               "美式发音 [",
               basic.get('us-phonetic'), ']')
-    basicexplains = basic.get('explains')
-    for explain in basicexplains:
-        print(explain)
+    elif "uk-phonetic" in basic:
+        print("英式发音 [", basic.get("uk-phonetic"), ']')
+    elif "us-phonetic" in basic:
+        print("美式发音 [", basic.get("us-phonetic"), ']')
+    else:
+        pass
+
+    if "explains" in basic:
+        basicexplains = basic.get("explains")
+        for explain in basicexplains:
+            print(explain)
+
 
 def print_web(web):
     '''
     print web translation
     '''
     print("")
-    print('有道词典-网络释义：')
+    print("有道词典-网络释义：")
     for explain in web:
         value = ""
         for exp in explain["value"]:
@@ -70,15 +80,25 @@ def print_web(web):
             value += " "
         print(explain["key"], " : ", value)
 
+
+def print_translate(translate):
+    '''
+    print translation
+    '''
+    print("有道翻译：", end='')
+    for trans in translate:
+        print(trans, end='')
+    print("")
+
+
 def parse(html):
     '''
     parse the json result to what user could read
     '''
     translation = json.loads(html)
     if translation.get('errorCode') == 0:
-        print("有道翻译：")
-        for trans in translation.get("translation"):
-            print(trans)
+        if 'translation' in translation:
+            print_translate(translation.get('translation'))
         if 'basic' in translation:
             print_basic(translation.get('basic'))
         if 'web' in translation:
@@ -110,6 +130,7 @@ def sanitize_arg(query_str):
         result = query_str.strip("'").strip('"')
     return result
 
+
 def main():
     '''
     parse arguments to translate
@@ -118,9 +139,11 @@ def main():
         print('No word to translate')
         exit(0)
     for argument in sys.argv[1:]:
+        print("<----------------------------------------------->")
         youdao_json = fetch(sanitize_arg(argument))
         parse(youdao_json)
-        print('')
+        print("<----------------------------------------------->")
+
 
 if __name__ == '__main__':
     main()
