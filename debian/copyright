@@ -7,6 +7,7 @@ Source: https://github.com/mudongliang/youdao-python
 Files: *
 Copyright: 2010 Daniela Debianizer
 License: GPL-3+
+ This program is free software ; you can redistribute it.
  On Debian GNU/Linux systems, the complete text of the GNU General
  Public License can be found in `/usr/share/common-licenses/GPL-2'
 
