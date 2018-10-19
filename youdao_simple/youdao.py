@@ -2,45 +2,66 @@
 # -*- coding:utf-8 -*-
 
 '''
-simple module to translate English to Chinse, Chinese to English
+Simple module to translate English to Chinse, Chinese to English
 '''
 
-# API key：701380394
-# keyfrom：youdao-python
+# APP KEY    : 110b85528ad498df
+# SECRET KEY : XS9nHguUbINnv7QFuXEmS1sHHa7VeyaK
 
 from __future__ import print_function, unicode_literals
 import json
 import sys
+import random
+import hashlib
 
 
 try:
     # compatible for python2
     from urllib import urlencode
     from urllib2 import urlopen
+    from urllib2 import URLError
 except ImportError:
     # compatible for python3
     from urllib.parse import urlencode
     from urllib.request import urlopen
+    from urllib.error import URLError
 
 
-URL = "http://fanyi.youdao.com/openapi.do?" + \
-      "keyfrom=youdao-python&key=701380394" + \
-      "&type=data&doctype=json&version=1.1&"
-
+URL = "https://openapi.youdao.com/api?"
+APP_KEY = "110b85528ad498df"
+SECRET_KEY = "XS9nHguUbINnv7QFuXEmS1sHHa7VeyaK"
 
 def fetch(query_str):
     '''
     use youdao api to get json result of translation
     '''
     print("查询单词：", query_str.strip())
-    query = {
-        'q': query_str.strip()
-    }
-    url = URL + urlencode(query)
-    response = urlopen(url, timeout=3)
-    html = response.read().decode("utf-8")
-    return html
 
+    html = ""
+    salt = random.randint(1, 65536)
+
+    # generate signature
+    string = APP_KEY+query_str+str(salt)+SECRET_KEY
+    string = string.encode(encoding='UTF-8')
+    sign = hashlib.md5(string).hexdigest()
+
+    query = {
+        'appKey': APP_KEY,
+        'q': query_str,
+        'from': "auto",
+        'to': "auto",
+        'salt': str(salt),
+        'sign': sign
+    }
+
+    url = URL + urlencode(query)
+    try:
+        response = urlopen(url, timeout=3)
+        html = response.read().decode("utf-8")
+    except URLError, err:
+        print(err.reason)
+
+    return html
 
 def print_basic(basic):
     '''
@@ -90,31 +111,52 @@ def print_translate(translate):
         print(trans, end='')
     print("")
 
+def print_err_message(err_code):
+    '''
+    get error message from Error Code
+    '''
+    err_message = {
+        '101':"缺少必填的参数，出现这个情况还可能是et的值和实际加密方式不对应",
+        '102':"不支持的语言类型",
+        '103':"翻译文本过长",
+        '104':"不支持的API类型",
+        '105':"不支持的签名类型",
+        '106':"不支持的响应类型",
+        '107':"不支持的传输加密类型",
+        '108':"appKey无效，注册账号， 登录后台创建应用和实例并完成绑定， 可获得应用ID和密钥等信息，其中应用ID就是appKey（ 注意不是应用密钥）",
+        '109':"batchLog格式不正确",
+        '110':"无相关服务的有效实例",
+        '111':"开发者账号无效",
+        '113':"q不能为空",
+        '201':"解密失败，可能为DES,BASE64,URLDecode的错误",
+        '202':"签名检验失败",
+        '203':"访问IP地址不在可访问IP列表",
+        '205':"请求的接口与选择的接入方式不一致",
+        '301':"辞典查询失败",
+        '302':"翻译查询失败",
+        '303':"服务端的其它异常",
+        '401':"账户已经欠费",
+        '411':"访问频率受限,请稍后访问",
+        '2005':"ext参数不对",
+        '2006':"不支持的voice"
+    }
+    if err_code in err_message:
+        print(err_message[err_code])
 
 def parse(html):
     '''
     parse the json result to what user could read
     '''
     translation = json.loads(html)
-    if translation.get('errorCode') == 0:
+    if translation.get('errorCode') == '0':
         if 'translation' in translation:
             print_translate(translation.get('translation'))
         if 'basic' in translation:
             print_basic(translation.get('basic'))
         if 'web' in translation:
             print_web(translation.get('web'))
-    elif translation.get('errorCode') == 20:
-        print('要翻译的文本过长')
-    elif translation.get('errorCode') == 30:
-        print('无法进行有效的翻译')
-    elif translation.get('errorCode') == 40:
-        print('不支持的语言类型')
-    elif translation.get('errorCode') == 50:
-        print('无效的key')
-    elif translation.get('errorCode') == 60:
-        print('无词典结果，仅在获取词典结果生效')
     else:
-        print('翻译出错，请输入合法单词')
+        print_err_message(translation.get('errorCode'))
 
 
 def sanitize_arg(query_str):
@@ -128,7 +170,7 @@ def sanitize_arg(query_str):
         result = result.encode("utf-8")
     else:
         result = query_str.strip("'").strip('"')
-    return result
+    return result.strip()
 
 
 def main():
@@ -141,7 +183,8 @@ def main():
     for argument in sys.argv[1:]:
         print("<----------------------------------------------->")
         youdao_json = fetch(sanitize_arg(argument))
-        parse(youdao_json)
+        if youdao_json:
+            parse(youdao_json)
         print("<----------------------------------------------->")
 
 
