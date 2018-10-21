@@ -42,12 +42,12 @@ def fetch(query_str):
     salt = random.randint(1, 65536)
 
     if hasattr(query_str, "decode"):
-        q = query_str.decode('UTF-8')
+        query = query_str.decode('UTF-8')
     else:
-        q = query_str
+        query = query_str
 
     # generate signature
-    string = APP_KEY+q+str(salt)+SECRET_KEY
+    string = APP_KEY+query+str(salt)+SECRET_KEY
     string = string.encode(encoding='UTF-8')
     sign = hashlib.md5(string).hexdigest()
 
@@ -167,7 +167,7 @@ def parse(html):
     '''
     translation = json.loads(html)
     if translation.get('errorCode') == '0':
-        #print(translation.get('query')) 
+        # print(translation.get('query'))
         if 'translation' in translation:
             print_translate(translation.get('translation'))
         if 'basic' in translation:
