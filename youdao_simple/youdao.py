@@ -116,6 +116,16 @@ def print_translate(translate):
         print(trans, end='')
     print("")
 
+
+def print_dict(ldict, webdict):
+    '''
+    print dictionary URL
+    '''
+    print("")
+    print("有道翻译-词典URL：")
+    print("词典URL:", ldict["url"])
+    print("网络词典URL:", webdict["url"])
+
 def print_err_message(err_code):
     '''
     get error message from Error Code
@@ -154,12 +164,15 @@ def parse(html):
     '''
     translation = json.loads(html)
     if translation.get('errorCode') == '0':
+        #print(translation.get('query')) 
         if 'translation' in translation:
             print_translate(translation.get('translation'))
         if 'basic' in translation:
             print_basic(translation.get('basic'))
         if 'web' in translation:
             print_web(translation.get('web'))
+        #if 'dict' in translation and 'webdict' in translation:
+        #    print_dict(translation.get('dict'), translation.get('webdict'))
     else:
         print_err_message(translation.get('errorCode'))
 
