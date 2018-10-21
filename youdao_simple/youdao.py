@@ -40,8 +40,13 @@ def fetch(query_str):
     html = ""
     salt = random.randint(1, 65536)
 
+    if hasattr(query_str, "decode"):
+        q = query_str.decode('UTF-8')
+    else:
+        q = query_str
+
     # generate signature
-    string = APP_KEY+query_str+str(salt)+SECRET_KEY
+    string = APP_KEY+q+str(salt)+SECRET_KEY
     string = string.encode(encoding='UTF-8')
     sign = hashlib.md5(string).hexdigest()
 
@@ -58,7 +63,7 @@ def fetch(query_str):
     try:
         response = urlopen(url, timeout=3)
         html = response.read().decode("utf-8")
-    except URLError, err:
+    except URLError as err:
         print(err.reason)
 
     return html
@@ -164,7 +169,7 @@ def sanitize_arg(query_str):
     sanitize the argument first
     '''
     if hasattr(query_str, "decode"):
-        result = query_str.decode("utf8")
+        result = query_str.decode("utf-8")
         result = result.strip("'")
         result = result.strip('"')
         result = result.encode("utf-8")
