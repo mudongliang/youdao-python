@@ -35,8 +35,6 @@ def fetch(query_str):
     '''
     use youdao api to get json result of translation
     '''
-    desc = colored("查询单词："+query_str.strip(), "red", attrs=['bold'])
-    print(desc)
 
     html = ""
     salt = random.randint(1, 65536)
@@ -45,6 +43,9 @@ def fetch(query_str):
         query = query_str.decode('UTF-8')
     else:
         query = query_str
+
+    desc = colored("查询单词："+query, "red", attrs=['bold'])
+    print(desc)
 
     # generate signature
     string = APP_KEY+query+str(salt)+SECRET_KEY
