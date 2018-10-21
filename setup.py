@@ -27,6 +27,7 @@ setup(
     entry_points = {
         'console_scripts': [
             'youdao = youdao_simple.youdao:main',
+            'youdao_pron = youdao_simple.youdao_pron:main',
         ],
     },
 )
