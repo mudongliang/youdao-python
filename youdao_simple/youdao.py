@@ -13,6 +13,7 @@ import json
 import sys
 import random
 import hashlib
+from termcolor import colored
 
 
 try:
@@ -26,7 +27,6 @@ except ImportError:
     from urllib.request import urlopen
     from urllib.error import URLError
 
-
 URL = "https://openapi.youdao.com/api?"
 APP_KEY = "110b85528ad498df"
 SECRET_KEY = "XS9nHguUbINnv7QFuXEmS1sHHa7VeyaK"
@@ -35,7 +35,8 @@ def fetch(query_str):
     '''
     use youdao api to get json result of translation
     '''
-    print("查询单词：", query_str.strip())
+    desc = colored("查询单词："+query_str.strip(), "red", attrs=['bold'])
+    print(desc)
 
     html = ""
     salt = random.randint(1, 65536)
@@ -73,7 +74,8 @@ def print_basic(basic):
     print basic translation
     '''
     print("")
-    print("有道词典-基本词典：")
+    desc = colored("有道词典-基本词典：", "red", attrs=['bold'])
+    print(desc)
     print("发音 [", basic.get("phonetic"), ']')
     if ("uk-phonetic" in basic) and ("us-phonetic" in basic):
         print("英式发音 [",
@@ -98,7 +100,8 @@ def print_web(web):
     print web translation
     '''
     print("")
-    print("有道词典-网络释义：")
+    desc = colored("有道词典-网络释义：", "red", attrs=['bold'])
+    print(desc)
     for explain in web:
         value = ""
         for exp in explain["value"]:
